@@ -4,7 +4,7 @@ pragma solidity ^0.4.16;
 //this dedines an interface 'interfaceProducing'.
 interface interfaceProducing 
 {
-    function producing(bytes32 block_header, uint k)  external returns(uint, uint, uint);
+    function producing(bytes32 ran_num, uint k)  external returns(uint, uint, uint);
 
 }
 
@@ -12,7 +12,7 @@ interface interfaceProducing
 //providing function 'arbitration'.
 interface interfaceArbitration
 {
-    function arbitration(address addr, bytes32 block_header, uint k, bytes32 k_i, bytes32 c_i, bytes32 w_i, bytes32 d_des_i) public returns(bool);
+    function arbitration(address addr, bytes32 ran_num, uint k, bytes32 k_i, bytes32 c_i, bytes32 w_i, bytes32 d_des_i) public returns(bool);
 }
 
 //this is a arbitration contract 'interfaceArbitration'
@@ -24,7 +24,7 @@ interface interfaceArbitration
     
     function arbitration(
                           address addr,           //invoked contract 'InterfaceProducing' address 
-                          bytes32 block_header,   //block_header is the first parameter of the function producing in the contract 'InterfaceImplProducing' 
+                          bytes32 ran_num,   //random number is the first parameter of the function producing in the contract 'InterfaceImplProducing' 
                           uint k,                 //arbitration number 'k'
                           bytes32 k_i,            //the data key 'k_i' of the data segment i 
                           bytes32 c_i,             //ciphertext for data segment 'd_i'
@@ -41,7 +41,7 @@ interface interfaceArbitration
        //obtaining some arbitrators through invoking contract 'interfaceProducing'.
        //this use arbitrators[i] to represent an arbitrator, since the Solidity does not provide API of mapping
        //about the relation between the miner(arbitrator) and the block.
-       (arbitrators[0], arbitrators[1], arbitrators[2]) = _interfaceProducing.producing(block_header, k); 
+       (arbitrators[0], arbitrators[1], arbitrators[2]) = _interfaceProducing.producing(ran_num, k); 
        
        
        //showing vote result of each arbitrators[i] 
