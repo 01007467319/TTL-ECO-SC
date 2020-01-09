@@ -4,7 +4,7 @@ pragma solidity ^0.4.16;
 //this dedines an interface 'interfaceArbitration'.
 interface interfaceArbitration 
 {
-   function arbitration(address addr, bytes32 block_header, uint k, bytes32 k_i, bytes32 c_i, bytes32 w_i, bytes32 d_des_i) public returns(bool);
+   function arbitration(address addr, bytes32 ran_num, uint k, bytes32 k_i, bytes32 c_i, bytes32 w_i, bytes32 d_des_i) public returns(bool);
 }
 
 //this is a sale contract 'sale'
@@ -200,9 +200,9 @@ interface interfaceArbitration
 
     //the buyer applies arbitration, when the buyer believes the data transaction is unfair.
     //both the seller and the buyer are provide arbitration data such as arbitration contract address 'addre',
-    //producing contract address 'addr', 'block_header', arbitration number 'k', the data key 'k_i', publi key 'pk',
+    //producing contract address 'addr', 'ran_num', arbitration number 'k', the data key 'k_i', publi key 'pk',
     //the ciphertext 'w_i' of the data key 'k_i', merkle verification path 'path_mer'.
-    function arbitration_invoke(address addre,address addr, bytes32 block_header, uint k, bytes32 k_i,  bytes32 c_i, bytes32 w_i, bytes32 d_des_i) returns(bool, uint)    
+    function arbitration_invoke(address addre,address addr, bytes32 ran_num, uint k, bytes32 k_i,  bytes32 c_i, bytes32 w_i, bytes32 d_des_i) returns(bool, uint)    
     {
 
        bool u1;
@@ -215,7 +215,7 @@ interface interfaceArbitration
        
        //obtaining arbitration result 'u1' through invoking function 'arbitration' 
        //in the arbitration contract 'interfaceArbitration'.
-       u1 = _interfaceArbitration.arbitration(addr, block_header, k, k_i, c_i, w_i, d_des_i); 
+       u1 = _interfaceArbitration.arbitration(addr, ran_num, k, k_i, c_i, w_i, d_des_i); 
        
        //if u1 is 'true' denoting the seller success, the contract confiscates the buyer's deposit,
        //refunds the seller's deposit and the money to the seller.
