@@ -4,7 +4,7 @@ pragma solidity ^0.4.16;
 //providing function 'producing'.
 interface interfaceProducing
 {
-    function producing(bytes32 block_header, uint k)  external returns(uint, uint, uint);
+    function producing(bytes32 ran_num, uint k)  external returns(uint, uint, uint);
 }
 
 
@@ -30,19 +30,19 @@ contract Producing is interfaceProducing
     //about the relation between the miner(arbitrator) and the block. 
     //subsituting signature algorithm with keccak256, 
     //since Solidity does not provide the API of deterministic digital signature.
-    function producing(bytes32 block_header, uint k) external returns(uint, uint, uint)
+    function producing(bytes32 ran_num, uint k) external returns(uint, uint, uint)
     {
         
-        bytes32 hash_block_header;
+        bytes32 hash_ran_num;
         uint h;
 
         for (uint i = 0; i < k; i ++)
         {
            if (i == 0)
            {
-              hash_block_header = keccak256(block_header);         //hash current block header block_header
-              hash_block_header = keccak256(block_header);         //hash current block header block_header
-              h = uint(hash_block_header);                         //convert bytes32 to uint
+              hash_ran_num = keccak256(ran_num);         //hash current random number ran_num
+              hash_ran_num = keccak256(ran_num);         //hash current random number ran_num
+              h = uint(hash_ran_num);                         //convert bytes32 to uint
               chain_height = block.number;                         //obtain current blockchain height
               number_block[i] = addmod(h, 0, chain_height);        //computing (h+0)%chain_height, obtaining one block number
               sign_value[i] = keccak256(this);                     //instituting signature algorithm DDSA with keccak256        
@@ -50,12 +50,12 @@ contract Producing is interfaceProducing
            }
            else
            {
-              hash_block_header = keccak256(block_header ^ sign_value[i - 1]);   //hash current block header block_header and the (i-1)-th arbitrator signature value
-              h = uint(hash_block_header);                                       //convert bytes32 to uint
+              hash_ran_num = keccak256(ran_num ^ sign_value[i - 1]);   //hash current random number ran_num and the (i-1)-th arbitrator signature value
+              h = uint(hash_ran_num);                                       //convert bytes32 to uint
               chain_height = block.number;                                       //obtain current blockchain height
-              hash_block_header = block_header;
+              hash_ran_num = ran_num;
               number_block[i] = addmod(h, 0, chain_height);       //computing (h+0)%chain_height, obtaining one block number
-              sign_value[i] = keccak256(block_header ^ sign_value[i - 1]);  //instituting signature algorithm with keccak256        
+              sign_value[i] = keccak256(ran_num ^ sign_value[i - 1]);  //instituting signature algorithm with keccak256        
                
            }
         }
