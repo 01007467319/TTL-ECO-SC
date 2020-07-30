@@ -1,10 +1,10 @@
 pragma solidity ^0.4.16;
 
-//in order to invoke function 'producing' in the contract 'interfaceProducing',
-//this dedines an interface 'interfaceProducing'.
-interface interfaceProducing 
+//in order to invoke function 'recruiting' in the contract 'interfaceRecruiting',
+//this dedines an interface 'interfaceRecruiting'.
+interface interfaceRecruiting 
 {
-    function producing(bytes32 ran_num, uint k)  external returns(uint, uint, uint);
+    function recruiting(bytes32 ran_num, uint k, unit l)  external returns(uint, uint, uint);
 
 }
 
@@ -12,7 +12,7 @@ interface interfaceProducing
 //providing function 'arbitration'.
 interface interfaceArbitration
 {
-    function arbitration(address addr, bytes32 ran_num, uint k, bytes32 k_i, bytes32 c_i, bytes32 w_i, bytes32 d_des_i) public returns(bool);
+    function arbitration(address addr, bytes32 ran_num, uint k, unit l, bytes32 k_i, bytes32 c_i, bytes32 w_i, bytes32 d_des_i) public returns(bool);
 }
 
 //this is a arbitration contract 'interfaceArbitration'
@@ -23,9 +23,10 @@ interface interfaceArbitration
     uint value = 0;
     
     function arbitration(
-                          address addr,           //invoked contract 'InterfaceProducing' address 
-                          bytes32 ran_num,   //random number is the first parameter of the function producing in the contract 'InterfaceImplProducing' 
+                          address addr,           //invoked contract 'InterfaceRecruiting' address 
+                          bytes32 ran_num,   //random number is the first parameter of the function recruiting in the contract 'InterfaceImplRecruiting' 
                           uint k,                 //arbitration number 'k'
+                          unit l,                 //index l denoting any consecutive l blocks in the table blockchian
                           bytes32 k_i,            //the data key 'k_i' of the data segment i 
                           bytes32 c_i,             //ciphertext for data segment 'd_i'
                           bytes32 w_i,            //the ciphertext 'w_i' of the data key 'k_i'
@@ -35,13 +36,13 @@ interface interfaceArbitration
 
     {
        
-       //finding contract 'interfaceProducing' by inputting contract address 'addr'.
-       interfaceProducing _interfaceProducing = interfaceProducing(addr);
+       //finding contract 'interfaceRecruiting' by inputting contract address 'addr'.
+       interfaceRecruiting _interfaceRecruiting = interfaceRecruiting(addr);
        
-       //obtaining some arbitrators through invoking contract 'interfaceProducing'.
-       //this use arbitrators[i] to represent an arbitrator, since the Solidity does not provide API of mapping
+       //obtaining some arbitrators through invoking contract 'interfaceRecruiting'.
+       //this use arbitrators[i] to represent an arbitrator, since the Solidity does not provide API of mapping function F
        //about the relation between the miner(arbitrator) and the block.
-       (arbitrators[0], arbitrators[1], arbitrators[2]) = _interfaceProducing.producing(ran_num, k); 
+       (arbitrators[0], arbitrators[1], arbitrators[2]) = _interfaceRecruiting.recruiting(ran_num, k, l); 
        
        
        //showing vote result of each arbitrators[i] 
@@ -72,7 +73,6 @@ interface interfaceArbitration
     
     //each arbitrator 'arbitrators[i]' is voting.
     //this subsitutes 'd_des_i = DPKE.Enc_pk(k_i)' with 'd_des_i == d_des_i', 
-    //since the Solidity does not provide API of the DPEK.Enc().
     //similarly, this subsitutes 'D_des_i = AES.Dec_{k_i}k(c_i)' with 'w_i == w_i',
     //'c_i = c_i', 'k_i == k_i'.
     function vote (uint val2, bytes32 d_des_i, bytes32 w_i, bytes32 k_i, bytes32 c_i) returns(uint)        
