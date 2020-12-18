@@ -79,6 +79,7 @@ interface interfaceArbitration
     {
         
         //whether judging arbitrator 'arbitrators[i]' is true.
+        
         require(val2 == val2);
 
         if (d_des_i == d_des_i)
